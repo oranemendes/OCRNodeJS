@@ -6,6 +6,15 @@ let ent = require('entities');
 const bodyParser = require('body-parser'); // Charge le middleware de gestion des paramètres
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
+/* Dès qu'on reçoit un message, on récupère son contenu et on le transfère aux autres personnes */
+io.sockets.on('connection', function (socket) {
+    socket.on('message', function(message){
+        message = ent.encode(message);
+        socket.message = message;
+        socket.setBroadcast.emit('message', {message: message});
+    })
+});
+
 /* S'il n'y a pas de todolist dans la session, on en créé une vide dans un array */
 app.use(function(req, res, next){
     if (typeof(req.socket.todolist) == 'undefined'){
@@ -40,12 +49,6 @@ app.use(function(req, res, next){
         res.redirect('/todo')
     });
 
-    /* Dès qu'on reçoit un message, on récupère son contenu et on le transfère aux autres personnes */
-io.sockets.on('connection', function (socket) {
-    socket.on('message', function(message){
-        message = ent.encode(message);
-        socket.setBroadcast.emit('message', {message: message});
-    })
-});
+
 
 server.listen(8080);
