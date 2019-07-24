@@ -6,7 +6,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 var app = express();
 
 /* On utilise les sessions */
-app.use(session({secret: 'todotopsecret'}));
+app.use(session({secret: 'todotopsecret'}))
 
 /* S'il n'y a pas de todolist dans la session, on en créé une vide dans un array */
 .use(function(req, res, next){
@@ -34,7 +34,7 @@ app.use(session({secret: 'todotopsecret'}));
         if(req.params.id !== ''){
             req.session.todolist.splice(req.params.id, 1);
         }
-        req.redirect('/todo')
+        res.redirect('/todo')
     })
 
 /* On redirige sur la todolist si la page n'est pas trouvée */
