@@ -41,9 +41,11 @@ app.use(function(req, res, next){
     });
 
     /* Dès qu'on reçoit un message, on récupère son contenu et on le transfère aux autres personnes */
-io.sockets.on('message', function(message){
-    message = ent.encode(message);
-    socket.emit('message', {message: message});
+io.sockets.on('connection', function (socket) {
+    socket.on('message', function(message){
+        message = ent.encode(message);
+        socket.setBroadcast.emit('message', {message: message});
+    })
 });
 
 server.listen(8080);
